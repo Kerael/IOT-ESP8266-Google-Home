@@ -10,7 +10,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
     rddata = None
     async def handler(self):
         try:
-            request_line, headers = await read_requests(self.reader)
+            request_line, headers = await read_request(self.reader)
             method, path, version = request_line[:-2].decode().split(None, 2)
             #websockets.accept()
         except Exception as e:
