@@ -94,7 +94,8 @@ async def ws_handler(websocket, path):
         print("")
 
 
-
+print("Version of websockets {}".format(websockets.__version__))
+        
 port = int(os.getenv('PORT', 5687))
 start_server = websockets.serve(ws_handler, '', port, klass=HttpWSSProtocol)
 # logger.info('Listening on port %d', port)
