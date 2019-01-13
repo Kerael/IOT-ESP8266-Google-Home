@@ -1,4 +1,5 @@
 import websockets
+from websockets.http import (read_message)
 import asyncio
 import json
 import time, os
@@ -9,7 +10,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
     rddata = None
     async def handler(self):
         try:
-            request_line, headers = await websockets.http.read_message(self.reader)
+            request_line, headers = await read_message(self.reader)
             method, path, version = request_line[:-2].decode().split(None, 2)
             #websockets.accept()
         except Exception as e:
