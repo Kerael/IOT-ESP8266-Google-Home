@@ -1,5 +1,5 @@
 import websockets
-from websockets.http import read_request
+from websockets.http import read_line
 import asyncio
 import json
 import time, os
@@ -10,10 +10,18 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
     rddata = None
     async def handler(self):
         try:
-            request_line, headers = await read_request(self.reader)
-            print("received a message request: {} , header {}".format(request_line, headers))
+            #request_line, headers = await websockets.http.read_message(self.reader)
+            request_line = await read_line(self.reader)
+            print("received a message request: {}".format(request_line, headers))
+            
+            method, path, version = request_line.split(b" ", 2)
+            print("split message into method:{} path:{}  and version:{}".format(request_line, headers))
             #method, path, version = request_line[:-2].decode().split(None, 2)
-            method, path, version = request_line[:-2].split(None, 2)
+            
+            
+            #path, headers = await read_request(self.reader)
+            #method, path, version = request_line[:-2].decode().split(None, 2)
+            #method, path, version = request_line[:-2].split(None, 2)
             #websockets.accept()
         except Exception as e:
             print(e.args)
@@ -26,7 +34,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
         if path == '/ws':
             # HACK: Put the read data back, to continue with normal WS handling.
             self.reader.feed_data(bytes(request_line))
-            self.reader.feed_data(headers.as_bytes().replace(b'\n', b'\r\n'))
+            #self.reader.feed_data(headers.as_bytes().replace(b'\n', b'\r\n'))
 
             return await super(HttpWSSProtocol, self).handler()
         else:
