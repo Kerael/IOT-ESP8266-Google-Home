@@ -15,7 +15,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             print("received a message request: {}".format(request_line))
             
             method, path, version = request_line.split(b" ", 2)
-            print("split message into method:{} path:{}  and version:{}".format(request_line))
+            print("split message into method:{} path:{}  and version:{}".format(method, path, version))
             #method, path, version = request_line[:-2].decode().split(None, 2)
             
             
