@@ -12,10 +12,10 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
         try:
             #request_line, headers = await websockets.http.read_message(self.reader)
             request_line = await read_line(self.reader)
-            print("received a message request: {}".format(request_line, headers))
+            print("received a message request: {}".format(request_line))
             
             method, path, version = request_line.split(b" ", 2)
-            print("split message into method:{} path:{}  and version:{}".format(request_line, headers))
+            print("split message into method:{} path:{}  and version:{}".format(request_line))
             #method, path, version = request_line[:-2].decode().split(None, 2)
             
             
