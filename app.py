@@ -24,7 +24,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             #method, path, version = request_line[:-2].split(None, 2)
             #websockets.accept()
         except Exception as e:
-            print(e.args)
+            print("Got exception in the first try of handler".format(e.args))
             self.writer.close()
             self.ws_server.unregister(self)
 
@@ -33,15 +33,15 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
         # TODO: Check headers etc. to see if we are to upgrade to WS.
         if path == '/ws':
             # HACK: Put the read data back, to continue with normal WS handling.
-            self.reader.feed_data(bytes(request_line))
+            #self.reader.feed_data(bytes(request_line))
             #self.reader.feed_data(headers.as_bytes().replace(b'\n', b'\r\n'))
-
+            print("Special Hacking would have taken place")
             return await super(HttpWSSProtocol, self).handler()
         else:
             try:
                 return await self.http_handler(method, path, version)
             except Exception as e:
-                print(e)
+                print("Got exception during http_handler method".format(e))
             finally:
 
                 self.writer.close()
@@ -83,7 +83,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             ])
             print("Response would look like this {}".format(response))
         except Exception as e:
-            print(e)
+            print("Exception in the first try of http_handler {}".format(e))
         self.writer.write(response.encode())
 
 def updateData(data):
