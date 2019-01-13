@@ -60,7 +60,7 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
             #wait for response and send it back to API.ai as is
             self.rddata = await self.rwebsocket.recv()
             #{"speech": "It is working", "displayText": "It is working"}
-            print(self.rddata)
+            print("Received rddata {}".format(self.rddata))
             state = json.loads(self.rddata)['state']
             self.rddata = '{"speech": "It is turned '+state+'", "displayText": "It is turned '+state+'"}'
 
@@ -70,11 +70,13 @@ class HttpWSSProtocol(websockets.WebSocketServerProtocol):
                 '',
                 ''+self.rddata+'',
             ])
+            print("Response would look like this {}".format(response))
         except Exception as e:
             print(e)
         self.writer.write(response.encode())
 
 def updateData(data):
+    print("UpdateData : {}".format(data))
     HttpWSSProtocol.rddata = data
 
 async def ws_handler(websocket, path):
